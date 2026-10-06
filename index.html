@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberShield VPN — Главная</title>
+    <title>CyberShield VPN — Панель управления</title>
     <style>
         :root {
             --bg-color: #0a0a12;
@@ -110,10 +110,10 @@
     <header>
         <div class="logo">CYBER.VPN</div>
         <nav>
-            <a href="index.html" class="active">Главная</a>
-            <a href="setup.html">Настройка</a>
-            <a href="github.html">GitHub Pages</a>
-            <a href="about.html">О проекте</a>
+            <a href="index.html" class="active">Подключение</a>
+            <a href="download.html">Скачать</a>
+            <a href="billing.html">Тарифы</a>
+            <a href="support.html">Поддержка</a>
         </nav>
     </header>
 
@@ -183,7 +183,7 @@
         locationBtn.addEventListener('click', (e) => { e.stopPropagation(); countriesModal.style.display = countriesModal.style.display === 'flex' ? 'none' : 'flex'; });
         document.querySelectorAll('.country-option').forEach(option => {
             option.addEventListener('click', function() {
-                currentFlag.textContent = this.getAttribute('data-flag');
+currentFlag.textContent = this.getAttribute('data-flag');
 currentCountry.textContent = this.getAttribute('data-country');
 selectedIP = this.getAttribute('data-ip');
 countriesModal.style.display = 'none';
