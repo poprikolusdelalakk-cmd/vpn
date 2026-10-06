@@ -3,121 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VibeVPN — Твой Личный VPN</title>
+    <title>CyberShield VPN — Твой личный рубеж свободы</title>
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --surface-color: #1f2833;
-            --accent-color: #45f3ff;
-            --text-color: #c5c6c7;
-            --text-bright: #ffffff;
+            --bg-color: #0a0a12;
+            --panel-bg: rgba(20, 20, 35, 0.65);
+            --neon-cyan: #00f0ff;
+            --neon-magenta: #ff007f;
+            --text-color: #e2e8f0;
+            --power-off: #334155;
         }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, var(--bg-color) 100%);
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100-vh;
-            background: radial-gradient(circle at center, #1f2833 0%, #0b0c10 100%);
+            align-items: center;
+            overflow-x: hidden;
         }
+
+        /* Вайбовый задний план с неоновыми сферами */
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -10%;
+            left: -10%;
+            z-index: -1;
+            filter: blur(80px);
+        }
+        .bg-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 0, 127, 0.12) 0%, rgba(0,0,0,0) 70%);
+            bottom: -10%;
+            right: -10%;
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        /* Шапка / Навигация */
         header {
+            width: 100%;
+            max-width: 1200px;
+            padding: 30px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
-            background-color: rgba(31, 40, 51, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(69, 243, 255, 0.2);
         }
+
         .logo {
             font-size: 24px;
-            font-weight: bold;
-            color: var(--accent-color);
-            text-shadow: 0 0 10px rgba(69, 243, 255, 0.5);
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
         }
+
         nav a {
             color: var(--text-color);
             text-decoration: none;
-            margin-left: 20px;
-            font-weight: 500;
-            transition: color 0.3s;
+            margin-left: 25px;
+            font-size: 15px;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            opacity: 0.8;
         }
+
         nav a:hover, nav a.active {
-            color: var(--accent-color);
+            opacity: 1;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
         }
-        .container {
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 40px;
-            background: rgba(31, 40, 51, 0.6);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-        }
-        h1 {
-            color: var(--text-bright);
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-        .btn {
-            display: inline-block;
-            background: transparent;
-            color: var(--accent-color);
-            border: 2px solid var(--accent-color);
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-weight: bold;
+
+        /* Главный контейнер-приложение */
+        .vpn-container {
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 30px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.4s;
-            margin-top: 30px;
-            box-shadow: 0 0 15px rgba(69, 243, 255, 0.2);
-        }
-        .btn:hover {
-            background: var(--accent-color);
-            color: var(--bg-color);
-            box-shadow: 0 0 25px rgba(69, 243, 255, 0.6);
-            transform: translateY(-2px);
-        }
-        footer {
-            margin-top: auto;
+            width: 90%;
+            max-width: 450px;
+            padding: 40px 30px;
+            margin-top: 40px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
             text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        /* Статус подключения */
+        .status-box {
+            margin-bottom: 30px;
+        }
+
+        .status-text {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #64748b;
+            transition: 0.3s;
+        }
+
+        .status-state {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 5px;
+            letter-spacing: 1px;
+            color: #94a3b8;
+            transition: 0.3s;
+        }
+
+        /* Кнопка включения / выключения */
+        .power-wrapper {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 40px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .power-btn {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: #1e1e38;
+            border: 6px solid #2d2d4d;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 4px 10px rgba(0,0,0,0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .power-btn svg {
+            width: 60px;
+            height: 60px;
+            fill: none;
+            stroke: var(--power-off);
+            stroke-width: 4;
+            stroke-linecap: round;
+            transition: 0.4s;
+        }
+
+        /* Пульсирующие кольца вокруг активной кнопки */
+        .power-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--neon-cyan);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: 0.5s ease;
+            pointer-events: none;
+        }
+
+        /* Стили при АКТИВНОМ VPN */
+        .vpn-container.connected .power-btn {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.4), 
+                        inset 0 0 15px rgba(0, 240, 255, 0.2);
+            background: #11293a;
+        }
+
+        .vpn-container.connected .power-btn svg {
+            stroke: var(--neon-cyan);
+            filter: drop-shadow(0 0 8px var(--neon-cyan));
+        }
+
+        .vpn-container.connected .power-ring {
+            animation: pulse-ring 2s infinite;
+        }
+
+        .vpn-container.connected .status-text {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .vpn-container.connected .status-state {
+            color: #ffffff;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.85); opacity: 0.5; }
+            50% { opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+
+        /* Селектор локаций (Списком стран) */
+        .location-selector {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .location-selector:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(0, 240, 255, 0.3);
+        }
+
+        .flag-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flag-icon {
+            font-size: 22px;
+        }
+
+        .country-name {
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        /* Информационные плашки (IP и пинг) */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .info-card {
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: #64748b;
+            margin-bottom: 4px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        /* Скрытый выпадающий список стран */
+        .countries-modal {
+            position: absolute;
+            bottom: -220px;
+            left: 0;
+            width: 100%;
+            background: #131324;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .country-option {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+        }
+
+        .country-option:hover {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--neon-cyan);
         }
     </style>
 </head>
 <body>
+
+    <div class="bg-glow"></div>
+    <div class="bg-glow-2"></div>
+
     <header>
-        <div class="logo">VibeVPN</div>
+        <div class="logo">CYBER.VPN</div>
         <nav>
             <a href="index.html" class="active">Главная</a>
             <a href="setup.html">Настройка</a>
-            <a href="github.html">GitHub</a>
+            <a href="github.html">GitHub Pages</a>
             <a href="about.html">О проекте</a>
         </nav>
     </header>
 
-    <div class="container">
-        <h1>Твой личный, быстрый и независимый VPN</h1>
-        <p>Забудь про блокировки, медленную скорость и сторонние сервисы, которые продают твои данные. Подними свой собственный VPN за 5 минут с помощью GitHub и бесплатного сервера.</p>
-        <p>Полный контроль, абсолютная приватность и эстетичный вайб.</p>
-        <a href="setup.html" class="btn">Начать установку</a>
-    </div>
+    <!-- Основной клиент VPN -->
+    <div class="vpn-container" id="vpnInterface">
+        
+        <div class="status-box">
+            <div class="status-text" id="statusText">Защита отключена</div>
+            <div class="status-state" id="statusState">НЕЗАЩИЩЕН</div>
+        </div>
 
-    <footer>
-        &copy; 2026 VibeVPN Проект. Сделано с кайфом.
-    </footer>
-</body>
-</html>
+        <div class="power-wrapper">
+            <div class="power-ring"></div>
+            <button class="power-btn" id="connectBtn" aria-label="Переключатель VPN">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2v10M18.36 5.64A9 9 0 1 1 5.64 5.64" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Кнопка выбора локации -->
+        <div class="location-selector" id="locationBtn">
+            <div class="flag-info">
+                <span class="flag-icon" id="currentFlag">🇩🇪</span>
+                <span class="country-name" id="currentCountry">Германия (Франкфурт)</span>
+            </div>
+▼
+🇩🇪 Германия (Франкфурт)
+
+
+🇳🇱 Нидерланды (Амстердам)
+
+
+🇫🇮 Финляндия (Хельсинки)
+
+
+🇺🇸 США (Нью-Йорк)
+
+Твой IP
+94.25.160.84
+
+
+Пинг
+24 ms
+
+const connectBtn = document.getElementById('connectBtn');
+const vpnInterface = document.getElementById('vpnInterface');
+const statusText = document.getElementById('statusText');
+const statusState = document.getElementById('statusState');
+const ipAddress = document.getElementById('ipAddress');
+const pingValue = document.getElementById('pingValue');
+const locationBtn = document.getElementById('locationBtn');
+const countriesModal = document.getElementById('countriesModal');
+const currentFlag = document.getElementById('currentFlag');
+const currentCountry = document.getElementById('currentCountry');
+// Храним дефолтный (реальный якобы) IP пользователя и IP серверов
+const realIP = "94.25.160.84";
+let selectedIP = "185.244.24.12"; // Изначально Германия
+let isConnected = false;
+// Переключатель ON / OFF
+connectBtn.addEventListener('click', () => {
+isConnected = !isConnected;
+if (isConnected) {
+vpnInterface.classList.add('connected');
+statusText.textContent = "Защита включена";
+statusState.textContent = "ПОДКЛЮЧЕНО";
+statusState.style.color = "var(--neon-cyan)";
+ipAddress.textContent = selectedIP;
+pingValue.textContent = Math.floor(Math.random() * (45 - 15) + 15) + " ms";
+} else {
+vpnInterface.classList.remove('connected');
+statusText.textContent = "Защита отключена";
+statusState.textContent = "НЕЗАЩИЩЕН";
+statusState.style.color = "#94a3b8";
+ipAddress.textContent = realIP;
+pingValue.textContent = "—";
+}
+});
+// Открытие / закрытие списка стран
+locationBtn.addEventListener('click', (e) => {
+e.stopPropagation();
+countriesModal.style.display = countriesModal.style.display === 'flex' ? 'none' : 'flex';
+});
+// Клик по стране из списка
+document.querySelectorAll('.country-option').forEach(option => {
+option.addEventListener('click', function() {
+const flag = this.getAttribute('data-flag');
+const country = this.getAttribute('data-country');
+selectedIP = this.getAttribute('data-ip');
+currentFlag.textContent = flag;
+currentCountry.textContent = country;
+countriesModal.style.display = 'none';
+// Если уже подключен, то обновляем IP "на лету"
+if (isConnected) {
+ipAddress.textContent = selectedIP;
+pingValue.textContent = Math.floor(Math.random() * (70 - 20) + 20) + " ms";
+}
+});
+});
+// Закрываем модалку при клике в любое другое место
+document.addEventListener('click', () => {
+countriesModal.style.display = 'none';
+});
