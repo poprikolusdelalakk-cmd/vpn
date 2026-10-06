@@ -3,191 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberShield VPN — Панель управления</title>
+    <title>CYBER.VPN — Панель управления</title>
     <style>
         :root {
-            --bg-color: #0a0a12;
-            --panel-bg: rgba(20, 20, 35, 0.65);
-            --neon-cyan: #00f0ff;
-            --neon-magenta: #ff007f;
-            --text-color: #e2e8f0;
-            --power-off: #334155;
+            --bg-color: #0b0813;
+            --card-color: #141122;
+            --text-color: #ffffff;
+            --accent-color: #ff3366;
+            --success-color: #00ff88;
+            --gray-text: #8c88a5;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
+
         body {
-            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, var(--bg-color) 100%);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             color: var(--text-color);
-            min-height: 100vh;
+        }
+
+        /* Шапка */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 80px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .logo span { color: var(--accent-color); }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        nav a:hover, nav a.active { color: var(--accent-color); }
+
+        /* Главный контейнер */
+        .container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow-x: hidden;
+            justify-content: center;
+            min-height: 75vh;
         }
-        .bg-glow {
-            position: absolute; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
-            top: -10%; left: -10%; z-index: -1; filter: blur(80px);
+
+        /* Карточка VPN */
+        .vpn-card {
+            background-color: var(--card-color);
+            width: 380px;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid #221c38;
         }
-        .bg-glow-2 {
-            position: absolute; width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(255, 0, 127, 0.12) 0%, rgba(0,0,0,0) 70%);
-            bottom: -10%; right: -10%; z-index: -1; filter: blur(80px);
+
+        .status-label {
+            font-size: 11px;
+            color: var(--gray-text);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
         }
-        header {
-            width: 100%; max-width: 1200px; padding: 30px 20px;
-            display: flex; justify-content: space-between; align-items: center;
+
+        .status-title {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 0;
+            margin-bottom: 35px;
+            color: var(--accent-color);
+            transition: color 0.3s;
         }
-        .logo {
-            font-size: 24px; font-weight: 800; letter-spacing: 2px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-magenta));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-        }
-        nav a {
-            color: var(--text-color); text-decoration: none; margin-left: 25px;
-            font-size: 15px; letter-spacing: 1px; transition: 0.3s; opacity: 0.7;
-        }
-        nav a:hover, nav a.active {
-            opacity: 1; color: var(--neon-cyan); text-shadow: 0 0 10px var(--neon-cyan);
-        }
-        .vpn-container {
-            background: var(--panel-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 30px;
-            width: 90%; max-width: 450px; padding: 40px 30px; margin-top: 40px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4); text-align: center; position: relative;
-        }
-        .status-box { margin-bottom: 30px; }
-        .status-text { font-size: 13px; text-transform: uppercase; letter-spacing: 3px; color: #64748b; }
-        .status-state { font-size: 28px; font-weight: 700; margin-top: 5px; color: #94a3b8; }
-        .power-wrapper {
-            position: relative; width: 200px; height: 200px;
-            margin: 0 auto 40px auto; display: flex; align-items: center; justify-content: center;
-        }
+
+        /* Кнопка включения */
         .power-btn {
-            width: 160px; height: 160px; border-radius: 50%; background: #1e1e38;
-            border: 6px solid #2d2d4d; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; position: relative; z-index: 2;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #20193a 0%, #15102a 100%);
+            border: 4px solid var(--accent-color);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.2);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-bottom: 40px;
         }
-        .power-btn svg { width: 60px; height: 60px; fill: none; stroke: var(--power-off); stroke-width: 4; transition: 0.4s; }
-        .power-ring {
-            position: absolute; width: 100%; height: 100%; border-radius: 50%;
-            border: 2px solid var(--neon-cyan); opacity: 0; transform: scale(0.8); pointer-events: none;
+
+        .power-btn svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--accent-color);
+            transition: fill 0.3s;
         }
-        .vpn-container.connected .power-btn {
-            border-color: var(--neon-cyan); box-shadow: 0 0 30px rgba(0, 240, 255, 0.4); background: #11293a;
+
+        /* Анимация подключения */
+        .power-btn.connecting {
+            border-color: #ffaa00;
+            animation: pulse 1.5s infinite;
         }
-        .vpn-container.connected .power-btn svg { stroke: var(--neon-cyan); filter: drop-shadow(0 0 8px var(--neon-cyan)); }
-        .vpn-container.connected .power-ring { animation: pulse-ring 2s infinite; }
-        .vpn-container.connected .status-text { color: var(--neon-cyan); }
-        .vpn-container.connected .status-state { color: #fff; text-shadow: 0 0 15px var(--neon-cyan); }
-        @keyframes pulse-ring {
-            0% { transform: scale(0.85); opacity: 0.5; }
-            100% { transform: scale(1.2); opacity: 0; }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 170, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 170, 0, 0); }
         }
+
+        /* Стили при подключении */
+        .power-btn.connected {
+            border-color: var(--success-color);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+        .power-btn.connected svg { fill: var(--success-color); }
+
+        /* Выбор локации */
         .location-selector {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 16px; padding: 12px 20px; display: flex; align-items: center;
-            justify-content: space-between; cursor: pointer; transition: 0.3s;
+            background-color: #1c1830;
+            border-radius: 10px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 25px;
         }
-        .location-selector:hover { background: rgba(255,255,255,0.08); border-color: rgba(0, 240, 255, 0.3); }
-        .flag-info { display: flex; align-items: center; gap: 12px; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px; }
-        .info-card { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 12px; font-size: 13px; }
-        .info-label { color: #64748b; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; }
-        .info-value { font-weight: 600; font-family: monospace; font-size: 14px; }
-        .countries-modal {
-            position: absolute; bottom: -220px; left: 0; width: 100%;
-            background: #131324; border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px; z-index: 10; display: none; flex-direction: column; overflow: hidden;
+
+        /* Инфо панель с IP */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
-        .country-option { padding: 12px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: 0.2s; text-align: left; }
-        .country-option:hover { background: rgba(0, 240, 255, 0.1); color: var(--neon-cyan); }
+        .info-box {
+            background-color: #18142a;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+        .info-box span {
+            display: block;
+            color: var(--gray-text);
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        /* Стили для тарифов (Модальное окно) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(7, 5, 13, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background-color: var(--card-color);
+            padding: 40px;
+            border-radius: 20px;
+            width: 450px;
+            text-align: center;
+            border: 1px solid #221c38;
+            position: relative;
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 20px;
+            font-size: 24px; cursor: pointer; color: var(--gray-text);
+        }
+        .tariff-card {
+            background: linear-gradient(145deg, #1c1735, #141122);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        .btn-free {
+            background-color: var(--accent-color);
+            color: white; border: none;
+            padding: 12px 30px; font-size: 16px; font-weight: bold;
+            border-radius: 8px; cursor: pointer; margin-top: 15px;
+            width: 100%; transition: background 0.2s;
+        }
+        .btn-free:hover { background-color: #e02251; }
+
+        /* Поле вывода ключа */
+        .key-box {
+            display: none;
+            background-color: #0b0813;
+            padding: 15px; border-radius: 8px;
+            margin-top: 20px; border: 1px dashed var(--success-color);
+            word-break: break-all; font-family: monospace; font-size: 12px;
+            text-align: left; color: var(--success-color);
+        }
     </style>
 </head>
 <body>
-    <div class="bg-glow"></div><div class="bg-glow-2"></div>
+
     <header>
-        <div class="logo">CYBER.VPN</div>
+        <div class="logo">CYBER<span>.VPN</span></div>
         <nav>
-            <a href="index.html" class="active">Подключение</a>
-            <a href="download.html">Скачать</a>
-            <a href="billing.html">Тарифы</a>
-            <a href="support.html">Поддержка</a>
+            <a href="#" class="active">Подключение</a>
+            <a href="#">Скачать</a>
+            <a id="tariff-menu">Тарифы</a>
+            <a href="#">Поддержка</a>
         </nav>
     </header>
 
-    <div class="vpn-container" id="vpnInterface">
-        <div class="status-box">
-            <div class="status-text" id="statusText">Защита отключена</div>
-            <div class="status-state" id="statusState">НЕЗАЩИЩЕН</div>
-        </div>
-        <div class="power-wrapper">
-            <div class="power-ring"></div>
-            <button class="power-btn" id="connectBtn">
-                <svg viewBox="0 0 24 24"><path d="M12 2v10M18.36 5.64A9 9 0 1 1 5.64 5.64" /></svg>
+    <div class="container">
+        <div class="vpn-card">
+            <div class="status-label">Защита отключена</div>
+            <div class="status-title" id="status-text">НЕЗАЩИЩЕН</div>
+
+            <button class="power-btn" id="vpn-trigger">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M11,6V13H13V6H11Z"/>
+                </svg>
             </button>
-        </div>
-        <div class="location-selector" id="locationBtn">
-            <div class="flag-info">
-                <span id="currentFlag" style="font-size:22px;">🇩🇪</span>
-                <span id="currentCountry" class="country-name">Германия (Франкфурт)</span>
+
+            <div class="location-selector">
+                <span id="loc-flag">DE Германия (Франкфурт)</span>
+                <span>▼</span>
             </div>
-            <span style="color: #64748b; font-size: 12px;">▼</span>
+
+            <div class="info-grid">
+                <div class="info-box">
+                    <span>Твой IP</span>
+                    <div id="ip-text">94.25.160.84</div>
+                </div>
+                <div class="info-box">
+                    <span>Трафик</span>
+                    <div id="traffic-text">—</div>
+                </div>
+            </div>
         </div>
-        <div class="countries-modal" id="countriesModal">
-            <div class="country-option" data-flag="🇩🇪" data-country="Германия" data-ip="185.244.24.12"><span>🇩🇪</span> Германия</div>
-            <div class="country-option" data-flag="🇳🇱" data-country="Нидерланды" data-ip="91.211.89.45"><span>🇳🇱</span> Нидерланды</div>
-            <div class="country-option" data-flag="🇫🇮" data-country="Финляндия" data-ip="95.175.99.102"><span>🇫🇮</span> Финляндия</div>
-            <div class="country-option" data-flag="🇺🇸" data-country="США (Нью-Йорк)" data-ip="192.241.130.8"><span>🇺🇸</span> США</div>
-        </div>
-        <div class="info-grid">
-            <div class="info-card"><div class="info-label">Твой IP</div><div class="info-value" id="ipAddress">94.25.160.84</div></div>
-            <div class="info-card"><div class="info-label">Пинг</div><div class="info-value" id="pingValue">—</div></div>
+    </div>
+
+    <!-- Модальное окно тарифов -->
+    <div class="modal" id="tariff-modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2>Выбери свой план</h2>
+            <p style="color: var(--gray-text)">Доступ к быстрым серверам без ограничений</p>
+            
+            <div class="tariff-card">
+                <h3>🎁 Промо: 1 Месяц бесплатно</h3>
+                <p>Доступ к серверам Германии и Нидерландов. Подходит для YouTube (4K), Instagram и сайтов.</p>
+                <button class="btn-free" id="get-free-btn">Получить бесплатно</button>
+                
+                <div class="key-box" id="key-output">
+                    <b style="color: white; display:block; margin-bottom:5px;">Твой ключ для AmneziaVPN / v2rayNG:</b>
+                    <span id="key-string">vless://6f9b2d3e-4fa1-4b16-8d5a-1b4d8e9f2c3a@185.200.118.4:443?encryption=none&security=reality&sni=://youtube.com&fp=chrome&pbk=q123_fake_key_for_demo_purposes_only#CyberVPN-Free-DE</span>
+                    <p style="font-size:10px; color:var(--gray-text); margin-top:10px; margin-bottom:0;">👉 Скопируй эту строку и вставь в любое VPN приложение (v2rayNG, Amnezia, NekoBox) через "Импорт из буфера".</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const connectBtn = document.getElementById('connectBtn');
-        const vpnInterface = document.getElementById('vpnInterface');
-        const statusText = document.getElementById('statusText');
-        const statusState = document.getElementById('statusState');
-        const ipAddress = document.getElementById('ipAddress');
-        const pingValue = document.getElementById('pingValue');
-        const locationBtn = document.getElementById('locationBtn');
-        const countriesModal = document.getElementById('countriesModal');
-        const currentFlag = document.getElementById('currentFlag');
-        const currentCountry = document.getElementById('currentCountry');
+        const vpnTrigger = document.getElementById('vpn-trigger');
+        const statusText = document.getElementById('status-text');
+        const ipText = document.getElementById('ip-text');
+        const trafficText = document.getElementById('traffic-text');
+        const statusLabel = document.querySelector('.status-label');
 
-        const realIP = "94.25.160.84"; 
-        let selectedIP = "185.244.24.12"; 
         let isConnected = false;
 
-        connectBtn.addEventListener('click', () => {
-            isConnected = !isConnected;
-            if (isConnected) {
-                vpnInterface.classList.add('connected');
-                statusText.textContent = "Защита включена";
-                statusState.textContent = "ПОДКЛЮЧЕНО";
-                ipAddress.textContent = selectedIP;
-                pingValue.textContent = Math.floor(Math.random() * (45 - 15) + 15) + " ms";
-            } else {
-                vpnInterface.classList.remove('connected');
-                statusText.textContent = "Защита отключена";
-                statusState.textContent = "НЕЗАЩИЩЕН";
-                ipAddress.textContent = realIP;
-                pingValue.textContent = "—";
-            }
-        });
-
-        locationBtn.addEventListener('click', (e) => { e.stopPropagation(); countriesModal.style.display = countriesModal.style.display === 'flex' ? 'none' : 'flex'; });
-        document.querySelectorAll('.country-option').forEach(option => {
-            option.addEventListener('click', function() {
-currentFlag.textContent = this.getAttribute('data-flag');
-currentCountry.textContent = this.getAttribute('data-country');
-selectedIP = this.getAttribute('data-ip');
-countriesModal.style.display = 'none';
-if (isConnected) ipAddress.textContent = selectedIP;
+        // Логика кнопки включения
+        vpnTrigger.addEventListener('click', () => {
+            if (!isConnected) {
+                // Стадия подключения
+                statusText.innerText = "ПОДКЛЮЧЕНИЕ...";
+                statusText.style.color = "#ffaa00";
+                vpnTrigger.classList.add('connecting');
+                
+                setTimeout(() => {
+                    // Подключено
+                    vpnTrigger.classList.remove('connecting');
+                    vpnTrigger.classList.add('connected');
+statusText.innerText = "ЗАЩИЩЕН";
+statusText.style.color = "var(--success-color)";
+statusLabel.innerText = "Защита активна";
+ipText.innerText = "185.200.118.4"; // IP скрытого сервера
+trafficText.innerText = "Без лимита";
+isConnected = true;
+}, 2000);
+} else {
+// Отключение
+vpnTrigger.classList.remove('connected');
+statusText.innerText = "НЕЗАЩИЩЕН";
+statusText.style.color = "var(--accent-color)";
+statusLabel.innerText = "Защита отключена";
+ipText.innerText = "94.25.160.84"; // Исходный IP
+trafficText.innerText = "—";
+isConnected = false;
+}
 });
+// Открытие и закрытие тарифов
+const tariffMenu = document.getElementById('tariff-menu');
+const tariffModal = document.getElementById('tariff-modal');
+const closeModal = document.getElementById('close-modal');
+const getFreeBtn = document.getElementById('get-free-btn');
+const keyBox = document.getElementById('key-output');
+tariffMenu.addEventListener('click', () => {
+tariffModal.style.display = 'flex';
 });
-document.addEventListener('click', () => countriesModal.style.display = 'none');
+closeModal.addEventListener('click', () => {
+tariffModal.style.display = 'none';
+});
+window.addEventListener('click', (e) => {
+if (e.target === tariffModal) tariffModal.style.display = 'none';
+});
+// Кнопка получения ключа
+getFreeBtn.addEventListener('click', () => {
+getFreeBtn.innerText = "Ключ успешно создан! 🎉";
+getFreeBtn.style.backgroundColor = "var(--success-color)";
+keyBox.style.display = 'block';
+});
